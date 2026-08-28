@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1068430201993",
+    "project_id": "nasro-voice-room",
+    "storage_bucket": "nasro-voice-room.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068430201993:android:dd891ed87119050c23e258",
+        "android_client_info": {
+          "package_name": "com.nasro28.nasro28"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1068430201993-9n7lh8cn862uo0afi2a0qitdesbm4kgu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYVCn39lU521MWq9kOoZCeuYlybIermRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1068430201993-9n7lh8cn862uo0afi2a0qitdesbm4kgu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
