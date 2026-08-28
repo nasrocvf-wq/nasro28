@@ -7,6 +7,7 @@ plugins {
 
 android {
     namespace = "com.nasro28.nasro28"
+
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
