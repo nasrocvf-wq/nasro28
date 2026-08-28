@@ -10,63 +10,54 @@ permissions:
   contents: read
 
 jobs:
-  build-apk:
+  create-flutter:
     name: Build APK
     runs-on: ubuntu-latest
 
     steps:
-      # 1. تحميل المشروع
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2. إعداد Java 17
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: "17"
 
-      # 3. إعداد Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           cache: true
 
-      # 4. قبول تراخيص Android
-      - name: Accept Android licenses
-        run: |
-          yes | sdkmanager --licenses || true
-
-      # 5. تثبيت Android SDK و NDK
       - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
         run: |
           sdkmanager "platform-tools"
           sdkmanager "platforms;android-35"
           sdkmanager "build-tools;35.0.0"
           sdkmanager "ndk;27.0.12077973"
 
-      # 6. التحقق من Flutter
-      - name: Flutter doctor
+      - name: Accept Android licenses
+        run: yes | sdkmanager --licenses || true
+
+      - name: Flutter Doctor
         run: flutter doctor -v
 
-      # 7. تحميل الحزم
       - name: Flutter Pub Get
         run: flutter pub get
 
-      # 8. تنظيف المشروع
       - name: Flutter Clean
         run: flutter clean
 
-      # 9. تحميل الحزم مرة أخرى
       - name: Flutter Pub Get Again
         run: flutter pub get
 
-      # 10. بناء APK
       - name: Build APK
         run: flutter build apk --release
 
-      # 11. رفع APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
