@@ -1,41 +1,75 @@
-name: Create Flutter Project
+name: Build Flutter APK
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  create-flutter:
+  build-apk:
+    name: Build APK
     runs-on: ubuntu-latest
 
     steps:
+      # 1. تحميل المشروع
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 2. إعداد Java 17
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
+      # 3. إعداد Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.2'
           channel: stable
+          cache: true
 
-      - name: Flutter pub get
+      # 4. قبول تراخيص Android
+      - name: Accept Android licenses
+        run: |
+          yes | sdkmanager --licenses || true
+
+      # 5. تثبيت Android SDK و NDK
+      - name: Setup Android SDK
+        run: |
+          sdkmanager "platform-tools"
+          sdkmanager "platforms;android-35"
+          sdkmanager "build-tools;35.0.0"
+          sdkmanager "ndk;27.0.12077973"
+
+      # 6. التحقق من Flutter
+      - name: Flutter doctor
+        run: flutter doctor -v
+
+      # 7. تحميل الحزم
+      - name: Flutter Pub Get
         run: flutter pub get
 
+      # 8. تنظيف المشروع
+      - name: Flutter Clean
+        run: flutter clean
+
+      # 9. تحميل الحزم مرة أخرى
+      - name: Flutter Pub Get Again
+        run: flutter pub get
+
+      # 10. بناء APK
       - name: Build APK
         run: flutter build apk --release
 
+      # 11. رفع APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
